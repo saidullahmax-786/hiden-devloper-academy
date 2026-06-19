@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hiden Developer Academy | Reyan Sir Mentor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* === A. CORE VARIABLES & SETUP === */
+        :root {
+            --bg: #030305;
+            --primary: #00f3ff;
+            --secondary: #b829ff;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
+            --transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Noto Sans Devanagari', sans-serif; }
+        body { background: var(--bg); color: #fff; overflow-x: hidden; scroll-behavior: smooth; }
+
+        /* === B. ANIMATIONS === */
+        .pop-effect { opacity: 0; transform: scale(0.7); transition: var(--transition); }
+        .pop-effect.visible { opacity: 1; transform: scale(1); }
+
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* === C. HERO SECTION === */
+        .hero { 
+            height: 100vh; display: flex; flex-direction: column; justify-content: center; 
+            align-items: center; text-align: center; 
+            background: radial-gradient(circle at center, #1a1a2e 0%, #030305 100%); 
+            padding: 0 20px;
+        }
+        .hero h1 { font-size: clamp(3rem, 8vw, 5rem); font-weight: 900; margin-bottom: 10px; }
+        .hero p { font-size: clamp(1.2rem, 3vw, 1.5rem); color: #aaa; max-width: 800px; }
+
+        /* === D. LAYOUT GRIDS === */
+        .section { padding: 80px 5%; max-width: 1300px; margin: 0 auto; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+
+        /* === E. COURSE CARDS === */
+        .card { 
+            background: var(--glass); border: 1px solid var(--border); border-radius: 20px; 
+            padding: 20px; position: relative; overflow: hidden; cursor: pointer; transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+        .card:hover { 
+            transform: translateY(-10px) scale(1.02); 
+            border-color: var(--primary); 
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.2); 
+        }
+        .card img { width: 100%; height: 180px; object-fit: cover; border-radius: 15px; margin-bottom: 15px; background: #222; }
+        .card h3 { font-size: 1.5rem; margin-bottom: 5px; }
+        .card .mentor-info { color: var(--primary); font-size: 0.9rem; margin-bottom: 10px; }
+        .card .stats { font-size: 0.85rem; color: #888; }
+        .coming-soon { opacity: 0.6; filter: grayscale(1); cursor: not-allowed; }
+        .coming-soon:hover { transform: none; border-color: var(--border); box-shadow: none; }
+
+        /* === F. STATS BOXES === */
+        .stat-box { text-align: center; padding: 40px; background: var(--glass); border-radius: 20px; border: 1px solid var(--border); }
+        .stat-box h2 { font-size: 3rem; color: var(--primary); }
+
+        /* === G. REVIEWS === */
+        .review-card { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 20px; border-left: 4px solid var(--secondary); }
+        .review-card p { font-style: italic; margin-bottom: 15px; line-height: 1.6; }
+        .review-card .name { font-weight: bold; color: var(--primary); }
+
+        /* === H. MODAL POPUP FORM === */
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); display: none; justify-content: center;
+            align-items: center; z-index: 1000; backdrop-filter: blur(15px);
+        }
+        .modal-content {
+            background: #111; border: 1px solid var(--primary); padding: 40px;
+            border-radius: 30px; width: 90%; max-width: 500px; transform: scale(0.5); transition: var(--transition);
+            position: relative;
+        }
+        .modal.active { display: flex; }
+        .modal.active .modal-content { transform: scale(1); }
+
+        input, select, button {
+            width: 100%; padding: 15px; margin: 10px 0; border-radius: 10px;
+            border: 1px solid var(--border); background: #222; color: #fff; font-size: 1rem;
+        }
+        input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 10px rgba(0,243,255,0.2); }
+        
+        button.btn-primary { 
+            background: linear-gradient(90deg, var(--primary), var(--secondary)); 
+            font-weight: bold; cursor: pointer; border: none; margin-top: 20px;
+        }
+        button.btn-primary:hover { opacity: 0.8; transform: scale(1.05); }
+        
+        .close-btn {
+            background: transparent; border: none; color: #ff4d4d; margin-top: 10px; cursor: pointer; font-weight: 600;
+        }
+        .close-btn:hover { color: #fff; text-shadow: 0 0 10px #ff4d4d; }
+    </style>
+</head>
+<body>
+
+    <div class="hero">
+        <h1 class="gradient-text pop-effect" id="main-title">Hiden Developer Academy</h1>
+        <p class="pop-effect">Reyan Sir & Experts ki team se seekhein digital skills jo aapko banayenge millionaire.</p>
+    </div>
+
+    <div class="section grid">
+        <div class="stat-box pop-effect">
+            <h2 id="student-count">0</h2>
+            <p>Happy Students Empowered</p>
+        </div>
+        <div class="stat-box pop-effect">
+            <h2 id="exp-count">0</h2>
+            <p>Years of Collective Mentorship</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="gradient-text pop-effect" style="font-size: 2.5rem; text-align: center; margin-bottom: 50px;">our powerfull Batches</h2>
+        <div class="grid">
+            
+            <div class="card pop-effect" onclick="openEnroll('YouTube Content Creation')">
+                <img src="yt.png" alt="YouTube Course">
+                <h3>YouTube Content Creation</h3>
+                <div class="mentor-info">By Reyan Sir</div>
+                <div class="stats">2 Yrs Exp | 9,500+ Students</div>
+        
+            </div>
+
+            <div class="card pop-effect" onclick="openEnroll('Web Development')">
+                <img src="web.png" alt="Web Dev">
+                <h3>Web Development</h3>
+                <div class="mentor-info">By Reyan Sir</div>
+                <div class="stats">2 Yrs Exp | 8,200+ Students</div>
+            </div>
+
+            <div class="card pop-effect" onclick="openEnroll('App Development')">
+                <img src="app.png" alt="App Dev">
+                <h3>App Development</h3>
+                <div class="mentor-info">By Reyan Sir</div>
+                <div class="stats">2 Yrs Exp | 7,800+ Students</div>
+            </div>
+
+            <div class="card pop-effect" onclick="openEnroll('Online Earning')">
+                <img src="online.png" alt="Online Earning">
+                <h3>Online Earning</h3>
+                <div class="mentor-info">By Puja Mam</div>
+                <div class="stats">6 Yrs Exp | 48,000+ Students</div>
+            </div>
+
+            <div class="card pop-effect" onclick="openEnroll('English Speaking')">
+                <img src="english.png" alt="English">
+                <h3>English Speaking</h3>
+                <div class="mentor-info">By Simran Mam</div>
+                <div class="stats">5 Yrs Exp | 35,000+ Students</div>
+            </div>
+
+            <div class="card pop-effect" onclick="openEnroll('Freelancing')">
+                <img src="free.png" alt="Freelancing">
+                <h3>Freelancing Mastery</h3>
+                <div class="mentor-info">By Reyan Sir</div>
+                <div class="stats">2 Yrs Exp | 9,100+ Students</div>
+            </div>
+
+            <div class="card pop-effect" onclick="openEnroll('Online Product Selling')">
+                <img src="product.png" alt="Product Selling">
+                <h3>Online Product Selling</h3>
+                <div class="mentor-info">By Sahil Sir</div>
+                <div class="stats">20 Yrs Exp | 442,000+ Students</div>
+            </div>
+
+            <div class="card pop-effect" onclick="openEnroll('Computer Course')">
+                <img src="computer.png" alt="Computer Course">
+                <h3>Computer Basic to Advanced</h3>
+                <div class="mentor-info">By Zoya Mam</div>
+                <div class="stats">4 Yrs Exp | 13,000+ Students</div>
+            </div>
+
+            <div class="card coming-soon pop-effect">
+                <div style="height: 180px; background: #222; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem;">Coming Soon</div>
+                <h3>AI Mastery Batch</h3>
+                <div class="mentor-info">New Expert</div>
+                <div class="stats">Hiring...</div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="gradient-text pop-effect" style="text-align: center; margin-bottom: 40px; font-size: 2.5rem;">Student Reviews</h2>
+        <div class="grid">
+            <div class="review-card pop-effect">
+                <p>"Reyan sir ka samjhane ka tarika sabse alag hai. YouTube course lene ke baad mere 1 mahine me 10k subscribers ho gaye."</p>
+                <div class="name">- Rahul Sharma</div>
+            </div>
+            <div class="review-card pop-effect">
+                <p>"Puja mam ne online earning ke jo methods bataye wo sach me kaam karte hain. Ab main ghar baithe apni padhai ke sath achha kama rahi hoon. thanku mam app bahut achhi padhati ho "</p>
+                <div class="name">- Anjali Verma</div>
+            </div>
+            <div class="review-card pop-effect">
+                <p>"Freelancing me mujhe pehla order Reyan sir ki strategy se mila. Unka 2 saal ka experience kam hai par knowledge top level hai!"</p>
+                <div class="name">- Sameer Khan</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="enrollModal">
+        <div class="modal-content">
+            <h2 id="modalTitle" class="gradient-text" style="font-size: 2rem; margin-bottom: 5px;">Enroll Now</h2>
+            <p style="margin-bottom: 20px; color: #888;">Niche apni details fill karein batch join karne ke liye.</p>
+            
+            <form onsubmit="submitEnroll(event)">
+                <input type="text" id="name" placeholder="Aapka Pura Naam" required>
+                <input type="tel" id="phone" placeholder="WhatsApp Number" required>
+                <select id="level" required>
+                    <option value="" disabled selected>Aapka Level Select Karein</option>
+                    <option value="Beginner">Beginner (Mujhe kuch nahi aata)</option>
+                    <option value="Intermediate">Intermediate (Thoda bahut aata hai)</option>
+                    <option value="Advanced">Advanced (Expert Level)</option>
+                </select>
+                <button type="submit" class="btn-primary">Join Batch Now</button>
+            </form>
+            
+            <button onclick="closeEnroll()" class="close-btn">✖ Cancel & Close</button>
+        </div>
+    </div>
+
+    <script>
+        // 1. Fatak Khulne Wala (Pop) Animation on Scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        // Apply observer to all elements with 'pop-effect' class
+        document.querySelectorAll('.pop-effect').forEach(el => observer.observe(el));
+
+        // 2. Animated Stats Counter Logic
+        function animateCounter(id, target) {
+            let count = 0;
+            const timer = setInterval(() => {
+                count += Math.ceil(target / 50); // Speed control
+                if (count >= target) {
+                    count = target;
+                    clearInterval(timer);
+                }
+                // Add commas for large numbers
+                document.getElementById(id).innerText = count.toLocaleString() + "+";
+            }, 30);
+        }
+
+        // Start counter animation after a small delay
+        setTimeout(() => {
+            animateCounter('student-count', 209600); // Total estimated students
+            animateCounter('exp-count', 9); // Total estimated years
+        }, 800);
+
+        // 3. Modal Form Logic
+        let currentBatch = "";
+        
+        function openEnroll(batch) {
+            currentBatch = batch;
+            document.getElementById('modalTitle').innerText = batch + " Batch";
+            document.getElementById('enrollModal').classList.add('active');
+        }
+
+        function closeEnroll() {
+            document.getElementById('enrollModal').classList.remove('active');
+            // Reset form fields on close
+            document.getElementById('name').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('level').value = '';
+        }
+
+        // 4. WhatsApp Submission Logic
+        function submitEnroll(e) {
+            e.preventDefault(); // Form refresh ko roko
+            
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const level = document.getElementById('level').value;
+
+            // WhatsApp Message Format
+            const msg = `Hello Hiden Developer Academy,\n\nMujhe naye batch me join hona hai.\n\n*Batch:* ${currentBatch}\n*Name:* ${name}\n*Number:* ${phone}\n*Level:* ${level}\n\nPlease aage ka process bataiye.`;
+            
+            // Encode and redirect
+            const waUrl = `https://wa.me/918002432270?text=${encodeURIComponent(msg)}`;
+            window.open(waUrl, '_blank');
+            
+            // Close form after redirect
+            closeEnroll();
+        }
+    </script>
+</body>
+</html>

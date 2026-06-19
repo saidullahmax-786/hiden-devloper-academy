@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hiden Developer | Building Multi-Million Dollar Digital Ecosystems</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #030305;
+            --primary: #00f3ff;
+            --secondary: #b829ff;
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        body { background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; scroll-behavior: smooth; }
+
+        /* Typography & Utilities */
+        h1, h2, h3 { font-weight: 800; line-height: 1.2; }
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--primary));
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shine 4s linear infinite;
+        }
+        @keyframes shine { to { background-position: 200% center; } }
+        
+        .section { padding: 100px 5%; max-width: 1400px; margin: 0 auto; position: relative; z-index: 10; }
+        .section-title { font-size: 3rem; margin-bottom: 20px; text-align: center; }
+        .section-subtitle { text-align: center; color: var(--text-muted); margin-bottom: 60px; font-size: 1.2rem; }
+
+        /* Glassmorphism & UI Elements */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        .glass-card::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            transform: skewX(-20deg); transition: 0.5s;
+        }
+        .glass-card:hover::before { left: 150%; }
+        .glass-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0, 243, 255, 0.1); border-color: rgba(0, 243, 255, 0.3); }
+
+        .btn {
+            display: inline-block; padding: 15px 35px; border-radius: 50px; font-weight: 600;
+            text-decoration: none; text-transform: uppercase; letter-spacing: 1px;
+            transition: var(--transition); cursor: pointer; border: none; outline: none;
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary), var(--secondary)); color: #fff;
+            box-shadow: 0 10px 30px rgba(184, 41, 255, 0.3);
+        }
+        .btn-primary:hover { transform: scale(1.05); box-shadow: 0 15px 40px rgba(0, 243, 255, 0.5); }
+        .btn-outline { background: transparent; border: 1px solid var(--primary); color: var(--primary); }
+        .btn-outline:hover { background: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary); }
+
+        /* === NEW ACADEMY BUTTON & ARROW ANIMATION === */
+        .academy-wrapper {
+            position: relative;
+            display: inline-block;
+            margin: 20px 0 40px 0;
+            z-index: 20;
+        }
+        .btn-academy {
+            background: linear-gradient(45deg, #ff007f, #7928ca);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(255, 0, 127, 0.5);
+            animation: pulse-glow 2s infinite;
+            font-size: 1.1rem;
+        }
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 15px rgba(255, 0, 127, 0.4); }
+            50% { box-shadow: 0 0 35px rgba(255, 0, 127, 0.9); transform: scale(1.02); }
+            100% { box-shadow: 0 0 15px rgba(255, 0, 127, 0.4); }
+        }
+        .arrow-container {
+            position: absolute;
+            top: -65px;
+            right: -40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: bounce-arrow 1s infinite alternate;
+            transform-origin: bottom;
+        }
+        .arrow-text {
+            color: #00f3ff;
+            font-size: 0.9rem;
+            font-weight: 900;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px #00f3ff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .arrow-down {
+            width: 0; 
+            height: 0; 
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 18px solid #00f3ff;
+            filter: drop-shadow(0 0 8px #00f3ff);
+        }
+        @keyframes bounce-arrow {
+            0% { transform: translateY(0) rotate(-15deg); }
+            100% { transform: translateY(-15px) rotate(-15deg); }
+        }
+
+        /* Scroll Animations */
+        .reveal { opacity: 0; transform: translateY(50px) scale(0.95); transition: all 1s cubic-bezier(0.5, 0, 0, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0) scale(1); }
+
+        /* Hero Section */
+        #hero { height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; position: relative; overflow: hidden; padding: 0 5%; }
+        #particles-js { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+        .hero-content { position: relative; z-index: 2; max-width: 1000px; }
+        .hero-title { font-size: clamp(3rem, 8vw, 6rem); margin-bottom: 10px; text-transform: uppercase; letter-spacing: -2px; }
+        .hero-tagline { font-size: clamp(1.2rem, 3vw, 2rem); color: var(--text-muted); margin-bottom: 20px; font-weight: 300; }
+        
+        .floating-cards { position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: 1; }
+        .float-card { position: absolute; width: 150px; height: 100px; background: var(--glass-bg); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); border-radius: 15px; animation: float 6s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-30px) rotate(5deg); } }
+
+        /* Stats Grid */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 30px; margin-top: -50px; }
+        .stat-card { text-align: center; padding: 30px; }
+        .stat-number { font-size: 3rem; font-weight: 900; margin-bottom: 10px; }
+        
+        /* Layout Grids */
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+
+        /* Projects */
+        .project-img-placeholder { width: 100%; height: 220px; background: linear-gradient(45deg, #111, #222); border-radius: 15px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; font-weight: 600; color: #555; overflow: hidden; position: relative; }
+        .project-img-placeholder::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, rgba(0,243,255,0.1) 0%, transparent 70%); opacity: 0; transition: 0.5s; }
+        .glass-card:hover .project-img-placeholder::after { opacity: 1; }
+        .project-title { font-size: 1.5rem; margin-bottom: 10px; }
+        .project-desc { color: var(--text-muted); margin-bottom: 25px; font-size: 0.95rem; line-height: 1.6; }
+
+        /* Testimonials */
+        .testimonial-form { max-width: 600px; margin: 0 auto 50px auto; display: flex; flex-direction: column; gap: 15px; }
+        .form-input, .form-select, .form-textarea {
+            width: 100%; background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border); border-radius: 12px;
+            padding: 18px; color: #fff; font-size: 1rem; transition: var(--transition);
+        }
+        .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 15px rgba(0,243,255,0.2); }
+        .reviews-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-height: 600px; overflow-y: auto; padding-right: 10px; }
+        .reviews-container::-webkit-scrollbar { width: 8px; }
+        .reviews-container::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 10px; }
+        .review-badge { display: inline-block; padding: 5px 10px; background: rgba(0,243,255,0.1); color: var(--primary); font-size: 0.7rem; border-radius: 20px; margin-bottom: 10px; text-transform: uppercase; }
+
+        /* Booking Form */
+        .booking-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+        @media (max-width: 900px) { .booking-wrapper { grid-template-columns: 1fr; } }
+        .booking-info h2 { margin-bottom: 20px; }
+        .booking-form { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .full-width { grid-column: span 2; }
+        select option { background: #111; color: #fff; }
+
+        /* Extra Sections (Timeline & Tech) */
+        .timeline { border-left: 2px solid var(--glass-border); padding-left: 40px; margin-left: 20px; }
+        .timeline-item { position: relative; margin-bottom: 40px; transition: var(--transition); }
+        .timeline-item:hover { transform: translateX(10px); }
+        .timeline-item::before { content: ''; position: absolute; left: -47px; top: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 15px var(--primary); }
+        
+        /* Footer & Contact */
+        .social-links { display: flex; gap: 20px; justify-content: center; margin-top: 40px; flex-wrap: wrap; }
+        .social-btn { padding: 15px 30px; border-radius: 30px; display: flex; align-items: center; gap: 10px; font-weight: bold; text-decoration: none; color: #fff; transition: var(--transition); }
+        .wa-btn { background: #25D366; } .wa-btn:hover { box-shadow: 0 0 20px #25D366; transform: translateY(-5px) scale(1.05); }
+        .ig-btn { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); } .ig-btn:hover { box-shadow: 0 0 20px #dc2743; transform: translateY(-5px) scale(1.05); }
+        .tg-btn { background: #0088cc; } .tg-btn:hover { box-shadow: 0 0 20px #0088cc; transform: translateY(-5px) scale(1.05); }
+        
+        footer { border-top: 1px solid var(--glass-border); padding: 40px 0; text-align: center; margin-top: 100px; color: var(--text-muted); }
+    </style>
+</head>
+<body>
+
+    <canvas id="particles-js"></canvas>
+
+    <section id="hero">
+        <div class="floating-cards">
+            <div class="float-card" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
+            <div class="float-card" style="top: 60%; right: 15%; animation-delay: 2s;"></div>
+            <div class="float-card" style="top: 80%; left: 20%; animation-delay: 4s;"></div>
+        </div>
+        <div class="hero-content reveal">
+            <h1 class="hero-title gradient-text">Hiden Developer</h1>
+            <p class="hero-tagline">Building Multi-Million Dollar Digital Ecosystems</p>
+            
+            <div class="academy-wrapper">
+                <div class="arrow-container">
+                    <div class="arrow-text">Explore Courses!</div>
+                    <div class="arrow-down"></div>
+                </div>
+                <a href="index.html" class="btn btn-academy">🎓 Hiden Developer Academy</a>
+            </div>
+
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <a href="#booking" class="btn btn-primary">Book Consultation</a>
+                <a href="#projects" class="btn btn-outline">View Ecosystem</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="stats-grid reveal">
+            <div class="glass-card stat-card">
+                <div class="stat-number gradient-text">2+</div>
+                <p>Years Experience</p>
+            </div>
+            <div class="glass-card stat-card">
+                <div class="stat-number gradient-text">400+</div>
+                <p>Websites</p>
+            </div>
+            <div class="glass-card stat-card">
+                <div class="stat-number gradient-text">30+</div>
+                <p>Mobile Apps</p>
+            </div>
+            <div class="glass-card stat-card">
+                <div class="stat-number gradient-text">70+</div>
+                <p>Games</p>
+            </div>
+            <div class="glass-card stat-card">
+                <div class="stat-number gradient-text">25+</div>
+                <p>AI Agents</p>
+            </div>
+            <div class="glass-card stat-card">
+                <div class="stat-number gradient-text">5+</div>
+                <p>Telegram Bots</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="section">
+        <h2 class="section-title reveal">Featured <span class="gradient-text">Ecosystems</span></h2>
+        <p class="section-subtitle reveal">A showcase of premium digital infrastructures</p>
+        
+        <div class="grid-3">
+            <div class="glass-card reveal">
+                
+                <h3 class="project-title">Raaz Lottery</h3>
+                <p class="project-desc">A high-scale, secure lottery platform with real-time draw mechanics and financial integrations.</p>
+                <a href="https://raazlottery.com" target="_blank" class="btn btn-outline">Visit Project</a>
+            </div>
+            <div class="glass-card reveal">
+            
+                
+                <h3 class="project-title">Zyapa Store</h3>
+                <p class="project-desc">Premium multi-vendor e-commerce architecture optimized for conversion and rapid scaling.</p>
+                <a href="https://zyapa.store" target="_blank" class="btn btn-outline">Visit Project</a>
+            </div>
+            <div class="glass-card reveal">
+             
+                <h3 class="project-title">AI Agents Portfolio</h3>
+                <p class="project-desc">Custom trained LLM wrappers and automated business agents operating 24/7 for enterprises.</p>
+                <a href="#contact" class="btn btn-outline">Request Demo</a>
+            </div>
+            <div class="glass-card reveal">
+              
+                <h3 class="project-title">Telegram Bot Ecosystem</h3>
+                <p class="project-desc">Including premium Telegram Music Bots and automated community management systems.</p>
+                <a href="#contact" class="btn btn-outline">View Matrix</a>
+            </div>
+            <div class="glass-card reveal">
+              
+                <h3 class="project-title">Mobile Applications</h3>
+                <p class="project-desc">Cross-platform fluid applications natively built for iOS and Android environments.</p>
+                <a href="#contact" class="btn btn-outline">Explore Apps</a>
+            </div>
+            <div class="glass-card reveal">
+             
+                <h3 class="project-title">Gaming Ecosystem</h3>
+                <p class="project-desc">Interactive 2D/3D web and mobile games designed with maximum retention mechanics.</p>
+                <a href="#contact" class="btn btn-outline">Play Demos</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title reveal">Enterprise <span class="gradient-text">Solutions</span></h2>
+        <div class="grid-4 mt-5">
+            <div class="glass-card reveal"><h3 class="project-title">Web Development</h3><p class="project-desc">High-performance frontend & backend architectures.</p></div>
+            <div class="glass-card reveal"><h3 class="project-title">Mobile App Dev</h3><p class="project-desc">Native & Hybrid iOS/Android applications.</p></div>
+            <div class="glass-card reveal"><h3 class="project-title">AI Agent Dev</h3><p class="project-desc">Intelligent workflow automation systems.</p></div>
+            <div class="glass-card reveal"><h3 class="project-title">Telegram Bots</h3><p class="project-desc">Music, moderation & API utility bots.</p></div>
+            <div class="glass-card reveal"><h3 class="project-title">Automation Systems</h3><p class="project-desc">No-code & custom API business automation.</p></div>
+            <div class="glass-card reveal"><h3 class="project-title">E-Commerce</h3><p class="project-desc">Conversion optimized storefront setups.</p></div>
+            <div class="glass-card reveal"><h3 class="project-title">Marketing Systems</h3><p class="project-desc">Data-driven funnels and tracking ecosystems.</p></div>
+            <div class="glass-card reveal"><h3 class="project-title">Growth Consulting</h3><p class="project-desc">Strategic scaling for digital businesses.</p></div>
+        </div>
+    </section>
+
+    <section class="section reveal">
+        <h2 class="section-title">Client <span class="gradient-text">Journey</span></h2>
+        <div class="timeline" style="max-width: 800px; margin: 40px auto 0 auto;">
+            <div class="timeline-item">
+                <h3>1. Discovery & Strategy</h3>
+                <p class="project-desc">Deep-dive into business goals, ecosystem planning, and tech stack selection.</p>
+            </div>
+            <div class="timeline-item">
+                <h3>2. Architecture Design</h3>
+                <p class="project-desc">UI/UX wireframing, database structuring, and system blueprinting.</p>
+            </div>
+            <div class="timeline-item">
+                <h3>3. Elite Development</h3>
+                <p class="project-desc">Coding the infrastructure using semantic, high-performance methodologies.</p>
+            </div>
+            <div class="timeline-item">
+                <h3>4. Deployment & Scaling</h3>
+                <p class="project-desc">Cloud setup, security auditing, and aggressive growth implementation.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="testimonials">
+        <h2 class="section-title reveal">Client <span class="gradient-text">Testimonials</span></h2>
+        <p class="section-subtitle reveal">Leave a review for Hiden Developer</p>
+        
+        <div class="glass-card reveal testimonial-form">
+            <input type="text" id="reviewerName" class="form-input" placeholder="Your Name" required>
+            <textarea id="reviewText" class="form-textarea" placeholder="Share your experience with Hiden Developer..." rows="3" required></textarea>
+            <button onclick="submitReview()" class="btn btn-primary" style="width: 100%;">Submit Review</button>
+        </div>
+
+        <div class="reviews-container reveal" id="reviewsList">
+            </div>
+    </section>
+
+    <section id="booking" class="section">
+        <div class="glass-card reveal booking-wrapper">
+            <div class="booking-info">
+                <h2>Initiate <span class="gradient-text">Project Phase</span></h2>
+                <p class="project-desc">Book a premium consultation to architect your next multi-million dollar digital ecosystem. Fill the parameters, and our system will route you directly to secure communications.</p>
+            </div>
+            
+            <form id="appointmentForm" class="booking-form" onsubmit="bookAppointment(event)">
+                <input type="text" id="bookName" class="form-input full-width" placeholder="Full Name" required>
+                <input type="text" id="bookIg" class="form-input" placeholder="Instagram ID" required>
+                <input type="text" id="bookTg" class="form-input" placeholder="Telegram ID" required>
+                <input type="email" id="bookEmail" class="form-input full-width" placeholder="Email Address" required>
+                
+                <select id="bookReason" class="form-select full-width" required>
+                    <option value="" disabled selected>Select Reason for Consultation</option>
+                    <option value="Website Development">Website Development</option>
+                    <option value="Mobile App Development">Mobile App Development</option>
+                    <option value="AI Agent">AI Agent</option>
+                    <option value="Telegram Bot">Telegram Bot</option>
+                    <option value="E-Commerce Store">E-Commerce Store</option>
+                    <option value="Business Automation">Business Automation</option>
+                    <option value="Startup Consultation">Startup Consultation</option>
+                    <option value="Marketing Strategy">Marketing Strategy</option>
+                    <option value="Growth Hacking">Growth Hacking</option>
+                    <option value="SaaS Development">SaaS Development</option>
+                    <option value="Custom Software">Custom Software</option>
+                    <option value="Landing Page">Landing Page</option>
+                    <option value="UI/UX Design">UI/UX Design</option>
+                    <option value="Branding">Branding</option>
+                    <option value="Business Website">Business Website</option>
+                    <option value="AI Chatbot">AI Chatbot</option>
+                    <option value="WhatsApp Automation">WhatsApp Automation</option>
+                    <option value="CRM System">CRM System</option>
+                    <option value="Payment Integration">Payment Integration</option>
+                    <option value="Sales Funnel">Sales Funnel</option>
+                    <option value="Content Strategy">Content Strategy</option>
+                    <option value="Game Development">Game Development</option>
+                    <option value="API Integration">API Integration</option>
+                    <option value="Data Dashboard">Data Dashboard</option>
+                    <option value="Security Consultation">Security Consultation</option>
+                    <option value="Cloud Deployment">Cloud Deployment</option>
+                    <option value="Team Consultation">Team Consultation</option>
+                    <option value="Business Scaling">Business Scaling</option>
+                    <option value="Digital Ecosystem Planning">Digital Ecosystem Planning</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <input type="date" id="bookDate" class="form-input" required>
+                <input type="time" id="bookTime" class="form-input" required>
+                
+                <button type="submit" class="btn btn-primary full-width">Book Appointment Securely</button>
+            </form>
+        </div>
+    </section>
+
+    <section id="contact" class="section reveal">
+        <h2 class="section-title">Direct <span class="gradient-text">Comm-Link</span></h2>
+        <div class="social-links">
+            <a href="https://wa.me/918002432270" target="_blank" class="social-btn wa-btn">WhatsApp HQ</a>
+            <a href="https://instagram.com/hiden_alexxaa" target="_blank" class="social-btn ig-btn">Instagram Base</a>
+            <a href="https://t.me/FutureAifounder" target="_blank" class="social-btn tg-btn">Telegram Core</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Hiden Developer. Engineered for Scale.</p>
+    </footer>
+
+    <script>
+        // 1. Enhanced Scroll Reveal Animation
+        const reveals = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) { entry.target.classList.add('active'); }
+            });
+        }, { threshold: 0.1 });
+        reveals.forEach(reveal => revealObserver.observe(reveal));
+
+        // 2. Simple Particle Engine for Hero Background
+        const canvas = document.getElementById('particles-js');
+        const ctx = canvas.getContext('2d');
+        let width, height, particles;
+
+        function initParticles() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            particles = [];
+            for(let i = 0; i < 60; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    size: Math.random() * 2 + 1
+                });
+            }
+        }
+        function drawParticles() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = 'rgba(0, 243, 255, 0.5)';
+            particles.forEach(p => {
+                p.x += p.vx; p.y += p.vy;
+                if(p.x < 0 || p.x > width) p.vx *= -1;
+                if(p.y < 0 || p.y > height) p.vy *= -1;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            requestAnimationFrame(drawParticles);
+        }
+        window.addEventListener('resize', initParticles);
+        initParticles();
+        drawParticles();
+
+        // 3. Testimonial System (LocalStorage)
+        const indianNames = ["Aarav", "Vivaan", "Aditya", "Vihaan", "Arjun", "Sai", "Reyansh", "Ayaan", "Krishna", "Ishaan", "Shaurya", "Atharva", "Kabir", "Rishi", "Pranav", "Dev", "Rudra", "Yash", "Dhruv", "Karthik"];
+        const genericReviews = [
+            "Delivered exactly what was promised. The UI is stunning.",
+            "Hiden Developer scaled our e-commerce store beautifully.",
+            "The Telegram bot automation saved us countless hours.",
+            "Top tier agency quality at an impressive speed.",
+            "Built a flawless ecosystem for our startup."
+        ];
+
+        function loadReviews() {
+            let reviews = JSON.parse(localStorage.getItem('hidenReviews'));
+            if (!reviews) {
+                reviews = [];
+                for(let i=0; i<20; i++) {
+                    reviews.push({
+                        name: indianNames[i],
+                        text: genericReviews[i % genericReviews.length],
+                        isSample: true
+                    });
+                }
+                localStorage.setItem('hidenReviews', JSON.stringify(reviews));
+            }
+            
+            const container = document.getElementById('reviewsList');
+            container.innerHTML = '';
+            [...reviews].reverse().forEach(rev => {
+                const badge = rev.isSample ? '<span class="review-badge">Sample Testimonial</span>' : '<span class="review-badge" style="color:#b829ff; background: rgba(184,41,255,0.1)">Verified Client</span>';
+                container.innerHTML += `
+                    <div class="glass-card">
+                        ${badge}
+                        <h3 style="margin-bottom: 10px;">${rev.name}</h3>
+                        <p class="project-desc">${rev.text}</p>
+                    </div>
+                `;
+            });
+        }
+
+        function submitReview() {
+            const nameInput = document.getElementById('reviewerName');
+            const textInput = document.getElementById('reviewText');
+            if(!nameInput.value || !textInput.value) return alert('Please fill both fields.');
+            
+            const reviews = JSON.parse(localStorage.getItem('hidenReviews')) || [];
+            reviews.push({ name: nameInput.value, text: textInput.value, isSample: false });
+            localStorage.setItem('hidenReviews', JSON.stringify(reviews));
+            
+            nameInput.value = ''; textInput.value = '';
+            loadReviews();
+        }
+        
+        loadReviews();
+
+        // 4. WhatsApp Booking Form Logic
+        function bookAppointment(e) {
+            e.preventDefault();
+            const name = document.getElementById('bookName').value;
+            const ig = document.getElementById('bookIg').value;
+            const tg = document.getElementById('bookTg').value;
+            const email = document.getElementById('bookEmail').value;
+            const reason = document.getElementById('bookReason').value;
+            const date = document.getElementById('bookDate').value;
+            const time = document.getElementById('bookTime').value;
+
+            const message = `Hello Hiden Developer,\n\nName: ${name}\nInstagram: ${ig}\nTelegram: ${tg}\nEmail: ${email}\n\nReason: ${reason}\nDate: ${date}\nTime: ${time}\n\nI would like to book an appointment.`;
+            
+            const encodedMessage = encodeURIComponent(message);
+            const waUrl = `https://wa.me/918002432270?text=${encodedMessage}`;
+            
+            window.open(waUrl, '_blank');
+        }
+    </script>
+</body>
+</html>
